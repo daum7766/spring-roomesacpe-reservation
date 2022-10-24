@@ -28,7 +28,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    ResponseEntity<String> createReservations(@RequestBody ReservationRequest reservationRequest)
+    ResponseEntity<Void> createReservations(@RequestBody ReservationRequest reservationRequest)
         throws URISyntaxException {
         long id = reservationService
             .save(reservationRequest.getDate(), reservationRequest.getTime(),

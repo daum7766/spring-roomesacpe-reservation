@@ -6,4 +6,14 @@ CREATE TABLE reservation (
     time TIME NOT NULL,
     name VARCHAR(20) NOT NULL,
     PRIMARY KEY(id)
-)
+);
+
+DROP TABLE IF EXISTS themes;
+
+CREATE TABLE themes (
+     id INTEGER NOT NULL AUTO_INCREMENT,
+     name VARCHAR(100) NOT NULL,
+     desc TEXT NOT NULL,
+     price INTEGER NOT NULL,
+     PRIMARY KEY(id)
+);
