@@ -4,10 +4,13 @@ import java.util.Objects;
 
 public class Thema {
 
-    private final long id;
-    private final String name;
-    private final String desc;
-    private final long price;
+    private long id;
+    private String name;
+    private String desc;
+    private long price;
+
+    public Thema() {
+    }
 
     public Thema(long id, String name, String desc, long price) {
         this.id = id;

@@ -33,7 +33,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("날짜와 시간, 이름을 넣어 Reservation 을 저장한다.")
     void createReservations01() {
-        ReservationRequest reservationRequest = createRequest(LocalDate.parse("2022-08-11"));
+        ReservationRequest reservationRequest = createRequest(LocalDate.parse("2022-09-11"));
 
         ExtractableResponse<Response> extract = createReservation(reservationRequest);
 
@@ -43,7 +43,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("중복된 날짜와 시간에 예약하면 400 에러가 발생한다.")
     void createReservations02() {
-        ReservationRequest reservationRequest = createRequest(LocalDate.parse("2022-08-12"));
+        ReservationRequest reservationRequest = createRequest(LocalDate.parse("2022-09-12"));
         createReservation(reservationRequest);
 
         ExtractableResponse<Response> extract = createReservation(reservationRequest);
@@ -54,7 +54,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("날짜를 이용해 Reservations 를 조회한다.")
     void getReservations() {
-        String dateString = "2022-08-13";
+        String dateString = "2022-09-13";
         ReservationRequest reservationRequest = createRequest(LocalDate.parse(dateString));
         createReservation(reservationRequest);
 
@@ -66,7 +66,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
     void deleteReservations() {
-        String dateString = "2022-08-14";
+        String dateString = "2022-09-14";
         ReservationRequest reservationRequest = createRequest(LocalDate.parse(dateString));
         createReservation(reservationRequest);
 

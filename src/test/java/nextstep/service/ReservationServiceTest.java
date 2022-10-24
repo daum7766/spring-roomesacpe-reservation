@@ -22,7 +22,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("날짜와 시간, 이름을 넣어 Reservation 을 저장한다.")
     void save01() {
-        ReservationRequest request = createRequest(LocalDate.parse("2022-08-10"));
+        ReservationRequest request = createRequest(LocalDate.parse("2022-07-10"));
         long id = reservationService
             .save(request.getDate(), request.getTime(), request.getName());
 
@@ -32,7 +32,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("중복된 날짜와 시간을 넣어 Reservation 을 저장할 수 없다.")
     void save02() {
-        ReservationRequest request = createRequest(LocalDate.parse("2022-08-11"));
+        ReservationRequest request = createRequest(LocalDate.parse("2022-07-11"));
         reservationService.save(request.getDate(), request.getTime(), request.getName());
 
         assertThatThrownBy(
@@ -43,7 +43,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("날짜를 이용해 Reservations 를 조회한다.")
     void findReservationsByDate() {
-        LocalDate date = LocalDate.parse("2022-08-12");
+        LocalDate date = LocalDate.parse("2022-07-12");
         ReservationRequest request = createRequest(date);
         long id = reservationService
             .save(request.getDate(), request.getTime(), request.getName());
@@ -61,7 +61,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
     void deleteByLocalDateAndLocalTime() {
-        LocalDate date = LocalDate.parse("2022-08-12");
+        LocalDate date = LocalDate.parse("2022-07-12");
         ReservationRequest request = createRequest(date);
         reservationService.save(request.getDate(), request.getTime(), request.getName());
 
