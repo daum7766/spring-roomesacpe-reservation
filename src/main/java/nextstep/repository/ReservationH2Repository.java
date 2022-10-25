@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import nextstep.domain.Reservation;
+import nextstep.domain.Reservation2;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -23,6 +25,12 @@ public class ReservationH2Repository implements ReservationRepository {
             resultSet.getLong("id"),
             resultSet.getDate("date").toLocalDate(),
             resultSet.getTime("time").toLocalTime(),
+            resultSet.getString("name")
+        );
+    private final RowMapper<Reservation2> mapper2 =
+        (resultSet, rowNum) -> new Reservation2(
+            resultSet.getLong("id"),
+            resultSet.getLong("scheduleId"),
             resultSet.getString("name")
         );
 
@@ -49,9 +57,31 @@ public class ReservationH2Repository implements ReservationRepository {
     }
 
     @Override
+    public long save2(long scheduleId, String name) {
+        final String sql = "insert into reservation (scheduleId, name) values (?, ?)";
+
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update((Connection con) -> {
+            PreparedStatement pstmt = con.prepareStatement(
+                sql,
+                Statement.RETURN_GENERATED_KEYS
+            );
+            pstmt.setLong(1, scheduleId);
+            pstmt.setString(2, name);
+            return pstmt;
+        }, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public Optional<Reservation2> findByScheduleId(long scheduleId) {
+        final String sql = "select * from reservation where scheduleId = ?";
+        return Optional.of(jdbcTemplate.queryForObject(sql, mapper2, scheduleId));
+    }
+
+    @Override
     public List<Reservation> findReservationsByDate(LocalDate date) {
         final String sql = "select * from reservation where date = ?";
-
         return jdbcTemplate.query(sql, mapper, date);
     }
 

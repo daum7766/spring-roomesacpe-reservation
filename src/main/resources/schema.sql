@@ -21,8 +21,8 @@ CREATE TABLE schedule (
 
 CREATE TABLE reservation (
     id INTEGER NOT NULL AUTO_INCREMENT,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
+    scheduleId INTEGER NOT NULL,
     name VARCHAR(20) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    foreign key (scheduleId) references schedule (id)
 );
