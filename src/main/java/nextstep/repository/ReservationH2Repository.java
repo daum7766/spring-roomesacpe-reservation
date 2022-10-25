@@ -15,7 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class H2ReservationRepository implements ReservationRepository {
+public class ReservationH2Repository implements ReservationRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Reservation> mapper =
@@ -26,7 +26,7 @@ public class H2ReservationRepository implements ReservationRepository {
             resultSet.getString("name")
         );
 
-    public H2ReservationRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationH2Repository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -18,7 +18,7 @@ public class ReservationService {
 
     @Autowired
     public ReservationService(
-        @Qualifier("h2ReservationRepository") ReservationRepository reservationRepository) {
+        @Qualifier("reservationH2Repository") ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 

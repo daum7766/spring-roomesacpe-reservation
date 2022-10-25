@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
-import nextstep.domain.Thema;
+import nextstep.domain.Theme;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,23 +13,23 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class H2ThemaRepository {
+public class ThemeH2Repository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<Thema> mapper =
-        (resultSet, rowNum) -> new Thema(
+    private final RowMapper<Theme> mapper =
+        (resultSet, rowNum) -> new Theme(
           resultSet.getLong("id"),
           resultSet.getString("name"),
           resultSet.getString("desc"),
           resultSet.getLong("price")
         );
 
-    public H2ThemaRepository(JdbcTemplate jdbcTemplate) {
+    public ThemeH2Repository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public long save(String name, String desc, long price) {
-        final String sql = "insert into themes (name, desc, price) values (?, ?, ?)";
+        final String sql = "insert into theme (name, desc, price) values (?, ?, ?)";
 
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((Connection con) -> {
@@ -45,13 +45,13 @@ public class H2ThemaRepository {
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    public List<Thema> findAll() {
-        final String sql = "select * from themes";
+    public List<Theme> findAll() {
+        final String sql = "select * from theme";
         return jdbcTemplate.query(sql, mapper);
     }
 
     public void deleteById(long id) {
-        final String sql = "delete from themes where id = ?";
+        final String sql = "delete from theme where id = ?";
         jdbcTemplate.update(sql, id);
     }
 }

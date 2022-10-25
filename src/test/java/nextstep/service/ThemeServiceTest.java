@@ -1,27 +1,27 @@
-package nextstep.repository;
+package nextstep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import nextstep.domain.Thema;
-import nextstep.dto.ThemaRequest;
+import nextstep.domain.Theme;
+import nextstep.dto.ThemeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class H2ThemaRepositoryTest {
+class ThemeServiceTest {
 
     @Autowired
-    private H2ThemaRepository h2ThemaRepository;
+    private ThemeService themeService;
 
     @Test
     @DisplayName("이름과 설명, 가격을 이용해 테마를 저장한다.")
     void save() {
-        final ThemaRequest themaRequest = new ThemaRequest("테마1", "설명1", 10000);
-        long id = h2ThemaRepository
-            .save(themaRequest.getName(), themaRequest.getDesc(), themaRequest.getPrice());
+        final ThemeRequest themeRequest = new ThemeRequest("테마1", "설명1", 10000);
+        long id = themeService
+            .save(themeRequest.getName(), themeRequest.getDesc(), themeRequest.getPrice());
 
         assertThat(id).isNotZero();
     }
@@ -29,12 +29,12 @@ class H2ThemaRepositoryTest {
     @Test
     @DisplayName("모든 테마의 정보를 가져온다.")
     void findAll() {
-        h2ThemaRepository
+        themeService
             .save("테마1", "설명1", 12000);
-        h2ThemaRepository
+        themeService
             .save("테마2", "설명2", 22000);
 
-        List<Thema> themes = h2ThemaRepository.findAll();
+        List<Theme> themes = themeService.findAll();
 
         assertThat(themes).hasSizeGreaterThanOrEqualTo(2);
     }
@@ -42,13 +42,13 @@ class H2ThemaRepositoryTest {
     @Test
     @DisplayName("id 를 이용해 테마를 삭제한다.")
     void deleteById() {
-        ThemaRequest themaRequest = new ThemaRequest("테마1", "설명1", 12000);
-        long id = h2ThemaRepository
-            .save(themaRequest.getName(), themaRequest.getDesc(), themaRequest.getPrice());
-        final Thema expected = themaRequest.toThema(id);
+        ThemeRequest themeRequest = new ThemeRequest("테마1", "설명1", 12000);
+        long id = themeService
+            .save(themeRequest.getName(), themeRequest.getDesc(), themeRequest.getPrice());
+        final Theme expected = themeRequest.toThema(id);
 
-        h2ThemaRepository.deleteById(id);
-        List<Thema> themes = h2ThemaRepository.findAll();
+        themeService.deleteById(id);
+        List<Theme> themes = themeService.findAll();
 
         assertThat(themes).doesNotContain(expected);
     }

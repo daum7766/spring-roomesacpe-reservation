@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {MemoryReservationRepository.class})
-class MemoryReservationRepositoryTest {
+@SpringBootTest(classes = {ReservationInMemoryRepository.class})
+class ReservationInMemoryRepositoryTest {
 
     @Autowired
-    private MemoryReservationRepository memoryReservationRepository;
+    private ReservationInMemoryRepository reservationInMemoryRepository;
 
     @Test
     @DisplayName("날짜와 시간, 이름을 넣어 Reservation 을 저장한다.")
     void save() {
         ReservationRequest request = createRequest(LocalDate.parse("2022-08-10"));
-        long id = memoryReservationRepository
+        long id = reservationInMemoryRepository
             .save(request.getDate(), request.getTime(), request.getName());
 
         assertThat(id).isNotZero();
@@ -33,12 +33,12 @@ class MemoryReservationRepositoryTest {
     void findReservationsByDate() {
         LocalDate date = LocalDate.parse("2022-08-12");
         ReservationRequest request = createRequest(date);
-        long id = memoryReservationRepository
+        long id = reservationInMemoryRepository
             .save(request.getDate(), request.getTime(), request.getName());
         final Reservation expected = new Reservation(id, request.getDate(), request.getTime(),
             request.getName());
 
-        List<Reservation> reservations = memoryReservationRepository
+        List<Reservation> reservations = reservationInMemoryRepository
             .findReservationsByDate(date);
 
         assertThat(reservations).hasSize(1);
@@ -51,11 +51,11 @@ class MemoryReservationRepositoryTest {
     void deleteByLocalDateAndLocalTime() {
         LocalDate date = LocalDate.parse("2022-08-12");
         ReservationRequest request = createRequest(date);
-        memoryReservationRepository.save(request.getDate(), request.getTime(), request.getName());
+        reservationInMemoryRepository.save(request.getDate(), request.getTime(), request.getName());
 
-        assertThat(memoryReservationRepository.findReservationsByDate(date)).hasSize(1);
-        memoryReservationRepository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
-        assertThat(memoryReservationRepository.findReservationsByDate(date)).isEmpty();
+        assertThat(reservationInMemoryRepository.findReservationsByDate(date)).hasSize(1);
+        reservationInMemoryRepository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(reservationInMemoryRepository.findReservationsByDate(date)).isEmpty();
     }
 
     private ReservationRequest createRequest(LocalDate date) {

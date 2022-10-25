@@ -11,7 +11,7 @@ import nextstep.domain.Reservation;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MemoryReservationRepository implements ReservationRepository {
+public class ReservationInMemoryRepository implements ReservationRepository {
 
     private final Map<LocalDate, Map<LocalTime, Reservation>> dataBase = new ConcurrentHashMap<>();
     private final AtomicLong id = new AtomicLong(1L);

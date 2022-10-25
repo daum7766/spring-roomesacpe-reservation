@@ -3,9 +3,9 @@ package nextstep.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import nextstep.dto.ThemaRequest;
-import nextstep.domain.Thema;
-import nextstep.service.ThemaService;
+import nextstep.dto.ThemeRequest;
+import nextstep.domain.Theme;
+import nextstep.service.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,29 +17,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/themes")
-public class ThemaController {
+public class ThemeController {
 
-    private final ThemaService themaService;
+    private final ThemeService themeService;
 
-    public ThemaController(ThemaService themaService) {
-        this.themaService = themaService;
+    public ThemeController(ThemeService themeService) {
+        this.themeService = themeService;
     }
 
     @PostMapping
-    ResponseEntity<Void> save(@RequestBody ThemaRequest themaRequest) throws URISyntaxException {
-        long id = themaService.save(themaRequest.getName(), themaRequest.getDesc(), themaRequest.getPrice());
+    ResponseEntity<Void> save(@RequestBody ThemeRequest themeRequest) throws URISyntaxException {
+        long id = themeService.save(themeRequest.getName(), themeRequest.getDesc(), themeRequest.getPrice());
         return ResponseEntity.created(new URI("/themes/" + id)).build();
     }
 
     @GetMapping
-    ResponseEntity<List<Thema>> findAll() {
-        List<Thema> themes = themaService.findAll();
+    ResponseEntity<List<Theme>> findAll() {
+        List<Theme> themes = themeService.findAll();
         return ResponseEntity.ok(themes);
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteById(@PathVariable long id) {
-        themaService.deleteById(id);
+        themeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

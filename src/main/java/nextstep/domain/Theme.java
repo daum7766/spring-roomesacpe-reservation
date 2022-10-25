@@ -2,17 +2,17 @@ package nextstep.domain;
 
 import java.util.Objects;
 
-public class Thema {
+public class Theme {
 
     private long id;
     private String name;
     private String desc;
     private long price;
 
-    public Thema() {
+    public Theme() {
     }
 
-    public Thema(long id, String name, String desc, long price) {
+    public Theme(long id, String name, String desc, long price) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -43,9 +43,9 @@ public class Thema {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Thema thema = (Thema) o;
-        return id == thema.id && price == thema.price && Objects.equals(name, thema.name)
-            && Objects.equals(desc, thema.desc);
+        Theme theme = (Theme) o;
+        return id == theme.id && price == theme.price && Objects.equals(name, theme.name)
+            && Objects.equals(desc, theme.desc);
     }
 
     @Override

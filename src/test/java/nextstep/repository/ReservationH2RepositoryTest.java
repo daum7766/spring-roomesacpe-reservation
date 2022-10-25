@@ -15,16 +15,16 @@ import org.springframework.test.context.jdbc.Sql;
 
 @Sql("/schema.sql")
 @SpringBootTest()
-class H2ReservationRepositoryTest {
+class ReservationH2RepositoryTest {
 
     @Autowired
-    private H2ReservationRepository h2ReservationRepository;
+    private ReservationH2Repository reservationH2Repository;
 
     @Test
     @DisplayName("날짜와 시간, 이름을 넣어 Reservation 을 저장한다.")
     void save() {
         ReservationRequest request = createRequest(LocalDate.parse("2022-08-10"));
-        long id = h2ReservationRepository
+        long id = reservationH2Repository
             .save(request.getDate(), request.getTime(), request.getName());
 
         assertThat(id).isNotZero();
@@ -35,12 +35,12 @@ class H2ReservationRepositoryTest {
     void findReservationsByDate() {
         LocalDate date = LocalDate.parse("2022-08-12");
         ReservationRequest request = createRequest(date);
-        long id = h2ReservationRepository
+        long id = reservationH2Repository
             .save(request.getDate(), request.getTime(), request.getName());
         final Reservation expected = new Reservation(id, request.getDate(), request.getTime(),
             request.getName());
 
-        List<Reservation> reservations = h2ReservationRepository
+        List<Reservation> reservations = reservationH2Repository
             .findReservationsByDate(date);
 
         assertThat(reservations).hasSize(1);
@@ -53,11 +53,11 @@ class H2ReservationRepositoryTest {
     void deleteByLocalDateAndLocalTime() {
         LocalDate date = LocalDate.parse("2022-08-12");
         ReservationRequest request = createRequest(date);
-        h2ReservationRepository.save(request.getDate(), request.getTime(), request.getName());
+        reservationH2Repository.save(request.getDate(), request.getTime(), request.getName());
 
-        assertThat(h2ReservationRepository.findReservationsByDate(date)).hasSize(1);
-        h2ReservationRepository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
-        assertThat(h2ReservationRepository.findReservationsByDate(date)).isEmpty();
+        assertThat(reservationH2Repository.findReservationsByDate(date)).hasSize(1);
+        reservationH2Repository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(reservationH2Repository.findReservationsByDate(date)).isEmpty();
     }
 
     private ReservationRequest createRequest(LocalDate date) {

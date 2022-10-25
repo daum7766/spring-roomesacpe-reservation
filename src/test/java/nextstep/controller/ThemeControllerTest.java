@@ -7,8 +7,8 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
-import nextstep.domain.Thema;
-import nextstep.dto.ThemaRequest;
+import nextstep.domain.Theme;
+import nextstep.dto.ThemeRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ThemaControllerTest {
+class ThemeControllerTest {
 
-    private final ThemaRequest themaRequest = new ThemaRequest("테마", "설명", 10000);
+    private final ThemeRequest themeRequest = new ThemeRequest("테마", "설명", 10000);
 
     @LocalServerPort
     int port;
@@ -33,7 +33,7 @@ class ThemaControllerTest {
     @Test
     @DisplayName("이름과 설명, 가격을 이용해 테마를 저장한다.")
     void save() {
-        ExtractableResponse<Response> response = createThema(themaRequest);
+        ExtractableResponse<Response> response = createTheme(themeRequest);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
@@ -41,10 +41,10 @@ class ThemaControllerTest {
     @Test
     @DisplayName("모든 테마의 정보를 가져온다.")
     void findAll() {
-        createThema(themaRequest);
-        createThema(themaRequest);
+        createTheme(themeRequest);
+        createTheme(themeRequest);
 
-        List<Thema> themes = findAllThema();
+        List<Theme> themes = findAllTheme();
 
         assertThat(themes).hasSizeGreaterThanOrEqualTo(2);
     }
@@ -52,25 +52,25 @@ class ThemaControllerTest {
     @Test
     @DisplayName("id 를 이용해 테마를 삭제한다.")
     void deleteById() {
-        ExtractableResponse<Response> response = createThema(themaRequest);
+        ExtractableResponse<Response> response = createTheme(themeRequest);
         String id = response.header("location").split("/")[2];
-        deleteThema(id);
+        deleteTheme(id);
 
-        Thema thema = themaRequest.toThema(Long.parseLong(id));
-        assertThat(findAllThema()).doesNotContain(thema);
+        Theme theme = themeRequest.toThema(Long.parseLong(id));
+        assertThat(findAllTheme()).doesNotContain(theme);
     }
 
-    private ExtractableResponse<Response> createThema(ThemaRequest themaRequest) {
+    private ExtractableResponse<Response> createTheme(ThemeRequest themeRequest) {
         return RestAssured
             .given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(themaRequest)
+            .body(themeRequest)
             .when().post("/themes")
             .then().log().all()
             .extract();
     }
 
-    private List<Thema> findAllThema() {
+    private List<Theme> findAllTheme() {
         return RestAssured
             .given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -80,7 +80,7 @@ class ThemaControllerTest {
             });
     }
 
-    private ExtractableResponse<Response> deleteThema(String id) {
+    private ExtractableResponse<Response> deleteTheme(String id) {
         return RestAssured
             .given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)

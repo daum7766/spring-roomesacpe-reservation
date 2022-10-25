@@ -1,24 +1,24 @@
 package nextstep.dto;
 
-import nextstep.domain.Thema;
+import nextstep.domain.Theme;
 
-public class ThemaRequest {
+public class ThemeRequest {
 
     private String name;
     private String desc;
     private long price;
 
-    public ThemaRequest() {
+    public ThemeRequest() {
     }
 
-    public ThemaRequest(String name, String desc, long price) {
+    public ThemeRequest(String name, String desc, long price) {
         this.name = name;
         this.desc = desc;
         this.price = price;
     }
 
-    public Thema toThema(long id) {
-        return new Thema(id, name, desc, price);
+    public Theme toThema(long id) {
+        return new Theme(id, name, desc, price);
     }
 
     public String getName() {
