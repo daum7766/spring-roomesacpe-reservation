@@ -33,10 +33,14 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     }
 
     @Override
-    public void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
+    public int deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
         Map<LocalTime, Reservation> localTimeReservationMap = dataBase
             .computeIfAbsent(date, k -> new ConcurrentHashMap<>());
-        localTimeReservationMap.remove(time);
+        if (localTimeReservationMap.containsKey(time)) {
+            localTimeReservationMap.remove(time);
+            return 1;
+        }
+        return 0;
     }
 
     @Override

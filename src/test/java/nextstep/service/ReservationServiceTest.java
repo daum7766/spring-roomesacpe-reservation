@@ -8,12 +8,14 @@ import java.time.LocalTime;
 import java.util.List;
 import nextstep.domain.Reservation;
 import nextstep.dto.ReservationRequest;
+import nextstep.exception.ReservationCreateException;
+import nextstep.exception.ReservationDeleteException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest()
+@SpringBootTest
 class ReservationServiceTest {
 
     @Autowired
@@ -37,7 +39,7 @@ class ReservationServiceTest {
 
         assertThatThrownBy(
             () -> reservationService.save(request.getDate(), request.getTime(), request.getName())
-        ).isExactlyInstanceOf(IllegalArgumentException.class);
+        ).isExactlyInstanceOf(ReservationCreateException.class);
     }
 
     @Test
@@ -60,14 +62,23 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
-    void deleteByLocalDateAndLocalTime() {
-        LocalDate date = LocalDate.parse("2022-07-12");
+    void deleteByLocalDateAndLocalTime01() {
+        LocalDate date = LocalDate.parse("2022-07-13");
         ReservationRequest request = createRequest(date);
         reservationService.save(request.getDate(), request.getTime(), request.getName());
 
         assertThat(reservationService.findReservationsByDate(date)).hasSize(1);
         reservationService.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
         assertThat(reservationService.findReservationsByDate(date)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 Reservation 을 삭제하면 에러가 발생한다.")
+    void deleteByLocalDateAndLocalTime02() {
+        LocalDate date = LocalDate.parse("2022-07-12");
+        
+        assertThatThrownBy(() -> reservationService.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00")))
+            .isExactlyInstanceOf(ReservationDeleteException.class);
     }
 
     private ReservationRequest createRequest(LocalDate date) {

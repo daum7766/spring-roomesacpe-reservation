@@ -11,10 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
-@Sql("/schema.sql")
-@SpringBootTest()
+@SpringBootTest
 class ReservationH2RepositoryTest {
 
     @Autowired
@@ -50,14 +48,25 @@ class ReservationH2RepositoryTest {
 
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
-    void deleteByLocalDateAndLocalTime() {
-        LocalDate date = LocalDate.parse("2022-08-12");
+    void deleteByLocalDateAndLocalTime01() {
+        LocalDate date = LocalDate.parse("2022-08-13");
         ReservationRequest request = createRequest(date);
         reservationH2Repository.save(request.getDate(), request.getTime(), request.getName());
 
         assertThat(reservationH2Repository.findReservationsByDate(date)).hasSize(1);
-        reservationH2Repository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        int count = reservationH2Repository
+            .deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(count).isEqualTo(1);
         assertThat(reservationH2Repository.findReservationsByDate(date)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 데이터를 삭제하면 0을 반환한다.")
+    void deleteByLocalDateAndLocalTime02() {
+        LocalDate date = LocalDate.parse("2022-08-13");
+        int count = reservationH2Repository
+            .deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(count).isZero();
     }
 
     private ReservationRequest createRequest(LocalDate date) {

@@ -65,7 +65,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
-    void deleteReservations() {
+    void deleteReservations01() {
         String dateString = "2022-09-14";
         ReservationRequest reservationRequest = createRequest(LocalDate.parse(dateString));
         createReservation(reservationRequest);
@@ -74,6 +74,14 @@ class ReservationControllerTest {
         ExtractableResponse<Response> response = deleteReservation(dateString, "13:00");
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
         assertThat(findReservations(dateString)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 Reservation 을 삭제하면 에러가 발생한다.")
+    void deleteReservations02() {
+        String dateString = "2022-09-15";
+        ExtractableResponse<Response> response = deleteReservation(dateString, "13:00");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
     private ReservationRequest createRequest(LocalDate date) {

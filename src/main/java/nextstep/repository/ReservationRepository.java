@@ -11,7 +11,7 @@ public interface ReservationRepository {
 
     long save(LocalDate date, LocalTime time, String name);
 
-    void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time);
+    int deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time);
 
     boolean existReservationByDateAndTime(LocalDate date, LocalTime time);
 }

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {ReservationInMemoryRepository.class})
+@SpringBootTest
 class ReservationInMemoryRepositoryTest {
 
     @Autowired
@@ -31,7 +31,7 @@ class ReservationInMemoryRepositoryTest {
     @Test
     @DisplayName("날짜를 이용해 Reservations 를 조회한다.")
     void findReservationsByDate() {
-        LocalDate date = LocalDate.parse("2022-08-12");
+        LocalDate date = LocalDate.parse("2022-08-11");
         ReservationRequest request = createRequest(date);
         long id = reservationInMemoryRepository
             .save(request.getDate(), request.getTime(), request.getName());
@@ -48,14 +48,25 @@ class ReservationInMemoryRepositoryTest {
 
     @Test
     @DisplayName("날짜와 시간을 넣어 Reservation 을 삭제한다.")
-    void deleteByLocalDateAndLocalTime() {
-        LocalDate date = LocalDate.parse("2022-08-12");
+    void deleteByLocalDateAndLocalTime01() {
+        LocalDate date = LocalDate.parse("2022-08-13");
         ReservationRequest request = createRequest(date);
         reservationInMemoryRepository.save(request.getDate(), request.getTime(), request.getName());
 
         assertThat(reservationInMemoryRepository.findReservationsByDate(date)).hasSize(1);
-        reservationInMemoryRepository.deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        int count = reservationInMemoryRepository
+            .deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(count).isEqualTo(1);
         assertThat(reservationInMemoryRepository.findReservationsByDate(date)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 데이터를 삭제하면 0을 반환한다.")
+    void deleteByLocalDateAndLocalTime02() {
+        LocalDate date = LocalDate.parse("2022-08-13");
+        int count = reservationInMemoryRepository
+            .deleteByLocalDateAndLocalTime(date, LocalTime.parse("13:00"));
+        assertThat(count).isZero();
     }
 
     private ReservationRequest createRequest(LocalDate date) {

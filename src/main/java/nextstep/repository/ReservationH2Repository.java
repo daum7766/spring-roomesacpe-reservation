@@ -56,9 +56,9 @@ public class ReservationH2Repository implements ReservationRepository {
     }
 
     @Override
-    public void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
+    public int deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
         final String sql = "delete from reservation where date = ? and time = ?";
-        jdbcTemplate.update(sql, date, time);
+        return jdbcTemplate.update(sql, date, time);
     }
 
     @Override
